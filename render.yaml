@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: nexora
+    runtime: node
+    plan: free
+    autoDeploy: true
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 22.15.0
+      - key: NEXORA_DATA_DIR
+        value: /opt/render/project/src/data

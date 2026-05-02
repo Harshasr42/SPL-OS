@@ -5,10 +5,11 @@ const { DatabaseSync } = require("node:sqlite");
 
 const root = __dirname;
 const workspaceRoot = path.resolve(root, "..");
-const dataDir = path.join(workspaceRoot, "data");
+const persistentDataRoot = process.env.NEXORA_DATA_DIR || process.env.RENDER_DISK_PATH || path.join(workspaceRoot, "data");
+const dataDir = persistentDataRoot;
 const dbPath = path.join(dataDir, "nexora.db");
 const legacyDbPath = path.join(dataDir, "splos.db");
-const port = 3000;
+const port = Number(process.env.PORT || 3000);
 
 fs.mkdirSync(dataDir, { recursive: true });
 
@@ -371,6 +372,6 @@ function writeJson(res, statusCode, payload) {
 }
 
 server.listen(port, () => {
-console.log(`Nexora full-stack app running at http://localhost:${port}`);
+console.log(`Nexora full-stack app running on port ${port}`);
     console.log(`SQLite database: ${dbPath}`);
 });
