@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">N</div>
+                <div class="brand-copy">
+                    <p class="eyebrow">Personal Life Command OS</p>
+                    <h1>Nexora</h1>
+                    <p class="brand-tagline">A calm, intelligent command center for your life.</p>
+                </div>
+            </div>
+
+            <nav class="nav-links" aria-label="Main navigation">
+                <button type="button" class="nav-link is-active" data-view="dashboard">Dashboard</button>
+                <button type="button" class="nav-link" data-view="tasks">Tasks</button>
+                <button type="button" class="nav-link" data-view="expenses">Expenses</button>
+                <button type="button" class="nav-link" data-view="habits">Habits</button>
+                <button type="button" class="nav-link" data-view="suggestions">Suggestions</button>
+                <button type="button" class="nav-link" data-view="profile">Profile</button>
+            </nav>
+
+            <section class="status-panel">
+                <p class="eyebrow">Live Monitor</p>
+                <div class="status-grid">
+                    <div><span>Reminder Loop</span><strong id="reminderStatus">Active</strong></div>
+                    <div><span>Monitor Loop</span><strong id="monitorStatus">Active</strong></div>
+                </div>
+                <p id="monitorSummary" class="muted">Watching deadlines, spending, and habit gaps.</p>
+            </section>
+        </aside>
+
+        <main class="main-layout">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Personal Operating System</p>
+                    <h2 id="viewTitle">Dashboard</h2>
+                </div>
+                <div class="topbar-actions">
+                    <div class="topbar-chip">
+                        <span class="chip-label">Focus</span>
+                        <strong id="heroFocus">System Ready</strong>
+                    </div>
+                </div>
+            </header>
+
+            <section class="view is-active" data-view-panel="dashboard">
+                <section class="hero">
+                    <div>
+                        <p class="eyebrow">Life Command Center</p>
+                        <h3>Run your day with more clarity and less friction.</h3>
+                        <p class="hero-copy">Your dashboard shows only the highest-signal data. Go into each workspace when you want to manage details.</p>
+                    </div>
+                    <div class="hero-card">
+                        <p class="eyebrow">Today's Focus</p>
+                        <h4 id="heroSubtext">Create a task, expense, or habit to activate your personalized operating system.</h4>
+                        <div class="hero-actions">
+                            <button type="button" class="ghost-button dashboard-quick" data-view-target="tasks">Plan Tasks</button>
+                            <button type="button" class="ghost-button dashboard-quick" data-view-target="suggestions">Open Advisor</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="metrics-grid">
+                    <article class="metric-card accent-blue">
+                        <span>Pending Tasks</span>
+                        <strong id="pendingTasksMetric">0</strong>
+                        <p id="pendingTasksNote">No task pressure detected.</p>
+                    </article>
+                    <article class="metric-card accent-amber">
+                        <span>Budget Usage</span>
+                        <strong id="budgetUsageMetric">0%</strong>
+                        <p id="budgetUsageNote">No expenses logged yet.</p>
+                    </article>
+                    <article class="metric-card accent-green">
+                        <span>Habit Momentum</span>
+                        <strong id="habitMomentumMetric">0</strong>
+                        <p id="habitMomentumNote">No streak data yet.</p>
+                    </article>
+                    <article class="metric-card accent-rose">
+                        <span>Alerts</span>
+                        <strong id="alertsMetric">0</strong>
+                        <p id="alertsNote">System is calm right now.</p>
+                    </article>
+                </section>
+
+                <section class="dashboard-grid">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Quick Summary</p>
+                                <h3>What needs attention</h3>
+                            </div>
+                        </div>
+                        <div id="summaryCards" class="summary-grid"></div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Active Alerts</p>
+                                <h3>Monitoring stream</h3>
+                            </div>
+                        </div>
+                        <div id="alertFeed" class="insight-list empty-state">No active alerts.</div>
+                    </article>
+                </section>
+
+                <section class="dashboard-grid dashboard-grid-lower">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Priority Queue</p>
+                                <h3>What to tackle next</h3>
+                            </div>
+                        </div>
+                        <div id="priorityQueue" class="card-list empty-state">No priority items right now.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">System Health</p>
+                                <h3>Balance snapshot</h3>
+                            </div>
+                        </div>
+                        <div class="health-panel">
+                            <div class="health-score-wrap">
+                                <div class="health-score">
+                                    <strong id="healthScore">100</strong>
+                                    <span>/100</span>
+                                </div>
+                                <p id="healthLabel" class="muted">Stable and well balanced.</p>
+                            </div>
+                            <div id="healthBreakdown" class="insight-list"></div>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Execution Map</p>
+                                <h3>Task completion pulse</h3>
+                            </div>
+                        </div>
+                        <div class="progress-spotlight">
+                            <div class="progress-ring-card">
+                                <div class="progress-ring" id="completionRing">
+                                    <div class="progress-ring-inner">
+                                        <strong id="completionRateValue">0%</strong>
+                                        <span>Completion</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-details">
+                                <div class="mini-stat">
+                                    <span>Completed</span>
+                                    <strong id="completedTasksCount">0</strong>
+                                </div>
+                                <div class="mini-stat">
+                                    <span>Due Today</span>
+                                    <strong id="dueTodayCount">0</strong>
+                                </div>
+                                <div class="mini-stat">
+                                    <span>Overdue</span>
+                                    <strong id="overdueCount">0</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Spending Lens</p>
+                                <h3>Category distribution</h3>
+                            </div>
+                        </div>
+                        <div id="spendingBreakdown" class="bar-list empty-state">No spending data yet.</div>
+                    </article>
+                </section>
+
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Habit Momentum</p>
+                                <h3>Consistency board</h3>
+                            </div>
+                        </div>
+                        <div id="habitMomentumBoard" class="habit-board empty-state">No habits tracked yet.</div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Focus Plan</p>
+                                <h3>Recommended next moves</h3>
+                            </div>
+                        </div>
+                        <div id="focusPlan" class="insight-list empty-state">No focus plan yet.</div>
+                    </article>
+                </section>
+
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Weekly Activity</p>
+                                <h3>Action trend</h3>
+                            </div>
+                        </div>
+                        <div id="weeklyActivityChart" class="chart-card empty-state">No activity yet.</div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Life Mix</p>
+                                <h3>Module distribution</h3>
+                            </div>
+                        </div>
+                        <div id="moduleMixChart" class="mix-card empty-state">No data mix yet.</div>
+                    </article>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Recent Activity</p>
+                            <h3>Latest changes</h3>
+                        </div>
+                    </div>
+                    <div id="activityFeed" class="insight-list empty-state">No recent activity yet.</div>
+                </section>
+            </section>
+
+            <section class="view" data-view-panel="tasks">
+                <section class="panel workspace-hero">
+                    <div>
+                        <p class="eyebrow">Task Management</p>
+                        <h3>Tasks and deadlines</h3>
+                        <p class="muted">Capture work here, then track urgency and completion without the rest of the system getting in the way.</p>
+                    </div>
+                    <form id="taskForm" class="form-grid task-form">
+                        <input type="hidden" name="taskId">
+                        <input type="text" name="title" placeholder="Task title" required>
+                        <input type="date" name="deadline" required>
+                        <select name="priority" required>
+                            <option value="">Priority</option>
+                            <option value="1">1 - Low</option>
+                            <option value="2">2 - Light</option>
+                            <option value="3">3 - Medium</option>
+                            <option value="4">4 - High</option>
+                            <option value="5">5 - Critical</option>
+                        </select>
+                        <input type="text" name="notes" placeholder="Notes or context (optional)">
+                        <button type="submit" id="taskSubmitButton">Add Task</button>
+                        <button type="button" class="ghost-button" id="taskCancelEditButton">Cancel Edit</button>
+                    </form>
+                </section>
+                <section class="metrics-grid module-metrics">
+                    <article class="metric-card accent-blue">
+                        <span>Open</span>
+                        <strong id="taskOpenMetric">0</strong>
+                        <p id="taskOpenNote">No active task load.</p>
+                    </article>
+                    <article class="metric-card accent-amber">
+                        <span>Due Soon</span>
+                        <strong id="taskDueSoonMetric">0</strong>
+                        <p id="taskDueSoonNote">No deadline cluster.</p>
+                    </article>
+                    <article class="metric-card accent-rose">
+                        <span>Urgent</span>
+                        <strong id="taskUrgentMetric">0</strong>
+                        <p id="taskUrgentNote">Urgent queue is calm.</p>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Task Strategy</p>
+                                <h3>Planning insight</h3>
+                            </div>
+                        </div>
+                        <div id="taskInsights" class="insight-list empty-state">No task insights yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Task Timeline</p>
+                                <h3>Deadline distribution</h3>
+                            </div>
+                        </div>
+                        <div id="taskTimelineBoard" class="bar-list empty-state">No task distribution yet.</div>
+                    </article>
+                </section>
+                <section class="panel">
+                    <div class="toolbar">
+                        <input id="taskSearch" type="search" placeholder="Search tasks">
+                        <select id="taskStatusFilter">
+                            <option value="ALL">All statuses</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="COMPLETED">Completed</option>
+                        </select>
+                        <select id="taskPriorityFilter">
+                            <option value="ALL">All priorities</option>
+                            <option value="URGENT">Urgent only</option>
+                            <option value="HIGH">Priority 4-5</option>
+                            <option value="MEDIUM">Priority 3</option>
+                            <option value="LOW">Priority 1-2</option>
+                        </select>
+                        <select id="taskSort">
+                            <option value="deadline">Sort by deadline</option>
+                            <option value="priority">Sort by priority</option>
+                            <option value="created">Sort by created</option>
+                        </select>
+                    </div>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Priority Lane</p>
+                                <h3>What matters most</h3>
+                            </div>
+                        </div>
+                        <div id="taskPriorityLane" class="card-list empty-state">No priority tasks yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Workload Shape</p>
+                                <h3>Execution balance</h3>
+                            </div>
+                        </div>
+                        <div id="taskWorkloadBoard" class="summary-grid"></div>
+                    </article>
+                </section>
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Task Board</p>
+                            <h3>Grouped execution view</h3>
+                        </div>
+                    </div>
+                    <div id="taskGroups" class="task-groups empty-state">No tasks yet.</div>
+                </section>
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">All Matching Tasks</p>
+                            <h3>Filtered list</h3>
+                        </div>
+                    </div>
+                    <div id="taskList" class="card-list empty-state">No tasks yet.</div>
+                </section>
+            </section>
+
+            <section class="view" data-view-panel="expenses">
+                <section class="panel workspace-hero">
+                    <div>
+                        <p class="eyebrow">Expense Tracking</p>
+                        <h3>Spending control</h3>
+                        <p class="muted">Log your expenses in one place and let Nexora monitor budget pressure quietly in the background.</p>
+                    </div>
+                    <form id="expenseForm" class="form-grid compact">
+                        <input type="hidden" name="expenseId">
+                        <input type="text" name="title" placeholder="Expense name" required>
+                        <input type="text" name="category" placeholder="Category" required>
+                        <input type="number" name="amount" placeholder="Amount" min="1" step="0.01" required>
+                        <input type="number" name="threshold" placeholder="Budget threshold" min="1" step="0.01" required>
+                        <input type="date" name="date">
+                        <button type="submit" id="expenseSubmitButton">Log Expense</button>
+                        <button type="button" class="ghost-button" id="expenseCancelEditButton">Cancel Edit</button>
+                    </form>
+                </section>
+                <section class="metrics-grid module-metrics">
+                    <article class="metric-card accent-amber">
+                        <span>Total Spend</span>
+                        <strong id="expenseTotalMetric">₹0</strong>
+                        <p id="expenseTotalNote">No expenses recorded.</p>
+                    </article>
+                    <article class="metric-card accent-blue">
+                        <span>Average Entry</span>
+                        <strong id="expenseAverageMetric">₹0</strong>
+                        <p id="expenseAverageNote">No spending pattern yet.</p>
+                    </article>
+                    <article class="metric-card accent-rose">
+                        <span>Highest Category</span>
+                        <strong id="expenseTopCategoryMetric">-</strong>
+                        <p id="expenseTopCategoryNote">No category pressure.</p>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Expense Strategy</p>
+                                <h3>Spending intelligence</h3>
+                            </div>
+                        </div>
+                        <div id="expenseStrategyBoard" class="insight-list empty-state">No expense strategy yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Threshold Timeline</p>
+                                <h3>Budget pressure map</h3>
+                            </div>
+                        </div>
+                        <div id="expenseThresholdBoard" class="bar-list empty-state">No threshold view yet.</div>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="toolbar">
+                            <input id="expenseSearch" type="search" placeholder="Search expenses">
+                            <select id="expenseCategoryFilter">
+                                <option value="ALL">All categories</option>
+                            </select>
+                            <select id="expenseSort">
+                                <option value="recent">Sort by recent</option>
+                                <option value="amount">Sort by amount</option>
+                            </select>
+                        </div>
+                        <div id="expenseInsights" class="insight-list empty-state">No expense insights yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Budget Board</p>
+                                <h3>Category pressure</h3>
+                            </div>
+                        </div>
+                        <div id="expenseCategoryBoard" class="bar-list empty-state">No expense data yet.</div>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Budget Priorities</p>
+                                <h3>What to review next</h3>
+                            </div>
+                        </div>
+                        <div id="expensePriorityLane" class="card-list empty-state">No budget priorities yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Spending Shape</p>
+                                <h3>Balance overview</h3>
+                            </div>
+                        </div>
+                        <div id="expenseWorkloadBoard" class="summary-grid"></div>
+                    </article>
+                </section>
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Expense Ledger</p>
+                            <h3>Filtered entries</h3>
+                        </div>
+                    </div>
+                    <div id="expenseList" class="card-list empty-state">No expenses yet.</div>
+                </section>
+            </section>
+
+            <section class="view" data-view-panel="habits">
+                <section class="panel workspace-hero">
+                    <div>
+                        <p class="eyebrow">Habit Tracking</p>
+                        <h3>Routine system</h3>
+                        <p class="muted">Build consistency in its own clean workspace with streak tracking and inactivity detection.</p>
+                    </div>
+                    <form id="habitForm" class="form-grid compact">
+                        <input type="hidden" name="habitId">
+                        <input type="text" name="name" placeholder="Habit name" required>
+                        <input type="number" name="targetFrequency" placeholder="Target / week" min="1" required>
+                        <input type="text" name="cue" placeholder="Cue or trigger (optional)">
+                        <button type="submit" id="habitSubmitButton">Add Habit</button>
+                        <button type="button" class="ghost-button" id="habitCancelEditButton">Cancel Edit</button>
+                    </form>
+                </section>
+                <section class="metrics-grid module-metrics">
+                    <article class="metric-card accent-green">
+                        <span>Best Streak</span>
+                        <strong id="habitBestMetric">0</strong>
+                        <p id="habitBestNote">No streak momentum yet.</p>
+                    </article>
+                    <article class="metric-card accent-blue">
+                        <span>Completed Today</span>
+                        <strong id="habitTodayMetric">0</strong>
+                        <p id="habitTodayNote">Nothing checked off today.</p>
+                    </article>
+                    <article class="metric-card accent-rose">
+                        <span>At Risk</span>
+                        <strong id="habitRiskMetric">0</strong>
+                        <p id="habitRiskNote">No inactive routines right now.</p>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Habit Strategy</p>
+                                <h3>Consistency guidance</h3>
+                            </div>
+                        </div>
+                        <div id="habitStrategyBoard" class="insight-list empty-state">No habit strategy yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Streak Distribution</p>
+                                <h3>Momentum map</h3>
+                            </div>
+                        </div>
+                        <div id="habitStreakBoard" class="bar-list empty-state">No streak distribution yet.</div>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="toolbar">
+                            <input id="habitSearch" type="search" placeholder="Search habits">
+                            <select id="habitFilter">
+                                <option value="ALL">All habits</option>
+                                <option value="ACTIVE">Active streaks</option>
+                                <option value="ATRISK">At risk</option>
+                            </select>
+                        </div>
+                        <div id="habitInsights" class="insight-list empty-state">No habit insights yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Consistency Matrix</p>
+                                <h3>Routine quality</h3>
+                            </div>
+                        </div>
+                        <div id="habitQualityBoard" class="habit-board empty-state">No habits tracked yet.</div>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Recovery Lane</p>
+                                <h3>What to restart next</h3>
+                            </div>
+                        </div>
+                        <div id="habitRecoveryLane" class="card-list empty-state">No habits need recovery right now.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Routine Balance</p>
+                                <h3>Consistency overview</h3>
+                            </div>
+                        </div>
+                        <div id="habitWorkloadBoard" class="summary-grid"></div>
+                    </article>
+                </section>
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Habit Zones</p>
+                            <h3>Grouped routine view</h3>
+                        </div>
+                    </div>
+                    <div id="habitGroups" class="task-groups empty-state">No habits tracked yet.</div>
+                </section>
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Habit Ledger</p>
+                            <h3>All matching habits</h3>
+                        </div>
+                    </div>
+                    <div id="habitList" class="card-list empty-state">No habits yet.</div>
+                </section>
+            </section>
+
+            <section class="view" data-view-panel="suggestions">
+                <section class="panel workspace-hero">
+                    <div>
+                        <p class="eyebrow">Smart Suggestion Engine</p>
+                        <h3>Advisor feed</h3>
+                        <p class="muted">This view is intentionally focused so your recommendations feel readable instead of buried in the dashboard.</p>
+                    </div>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Top Guidance</p>
+                                <h3>Primary recommendation</h3>
+                            </div>
+                        </div>
+                        <div id="topSuggestionCard" class="hero-card">
+                            <p class="eyebrow">Advisor</p>
+                            <h4>No suggestion yet.</h4>
+                        </div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Signal Balance</p>
+                                <h3>Module signals</h3>
+                            </div>
+                        </div>
+                        <div id="signalBoard" class="summary-grid"></div>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Advice Radar</p>
+                                <h3>Pressure distribution</h3>
+                            </div>
+                        </div>
+                        <div id="suggestionRadar" class="bar-list empty-state">No recommendation signals yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Decision Queue</p>
+                                <h3>What to act on first</h3>
+                            </div>
+                        </div>
+                        <div id="suggestionPriorityLane" class="card-list empty-state">No priority guidance yet.</div>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Grouped Guidance</p>
+                                <h3>By life area</h3>
+                            </div>
+                        </div>
+                        <div id="suggestionGroups" class="task-groups empty-state">No grouped guidance yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Action Map</p>
+                                <h3>Immediate next steps</h3>
+                            </div>
+                        </div>
+                        <div id="suggestionActionMap" class="insight-list empty-state">No action map yet.</div>
+                    </article>
+                </section>
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Complete Advisor Feed</p>
+                            <h3>All current suggestions</h3>
+                        </div>
+                    </div>
+                    <div id="suggestionList" class="insight-list empty-state">No suggestions yet.</div>
+                </section>
+            </section>
+
+            <section class="view" data-view-panel="profile">
+                <section class="panel workspace-hero">
+                    <div>
+                        <p class="eyebrow">User Profile</p>
+                        <h3>Identity and preferences</h3>
+                        <p class="muted">Save your personal context here so the app stays organized and grounded around you.</p>
+                    </div>
+                    <form id="profileForm" class="form-grid compact">
+                        <input type="text" name="name" placeholder="Your name" required>
+                        <input type="email" name="email" placeholder="Email address" required>
+                        <input type="text" name="preferences" placeholder="Focus style or preference" required>
+                        <input type="text" name="goal" placeholder="Current main goal">
+                        <select name="energyMode">
+                            <option value="">Energy mode</option>
+                            <option value="Deep Work">Deep Work</option>
+                            <option value="Balanced">Balanced</option>
+                            <option value="Recovery">Recovery</option>
+                        </select>
+                        <button type="submit">Save Profile</button>
+                    </form>
+                </section>
+                <section class="metrics-grid module-metrics">
+                    <article class="metric-card accent-blue">
+                        <span>Goal Focus</span>
+                        <strong id="profileGoalMetric">-</strong>
+                        <p id="profileGoalNote">No primary goal saved yet.</p>
+                    </article>
+                    <article class="metric-card accent-green">
+                        <span>Energy Mode</span>
+                        <strong id="profileEnergyMetric">-</strong>
+                        <p id="profileEnergyNote">No operating mode selected.</p>
+                    </article>
+                    <article class="metric-card accent-amber">
+                        <span>Data Signals</span>
+                        <strong id="profileDataMetric">0</strong>
+                        <p id="profileDataNote">No records in the system yet.</p>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Identity Board</p>
+                                <h3>Personal context</h3>
+                            </div>
+                        </div>
+                        <div id="profileIdentityBoard" class="summary-grid"></div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Profile Strategy</p>
+                                <h3>Operating guidance</h3>
+                            </div>
+                        </div>
+                        <div id="profileStrategyBoard" class="insight-list empty-state">No profile strategy yet.</div>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Profile Card</p>
+                                <h3>Your operating context</h3>
+                            </div>
+                        </div>
+                        <div id="profileCard" class="profile-card empty-state">No profile saved yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Data Controls</p>
+                                <h3>Export and reset</h3>
+                            </div>
+                        </div>
+                        <div class="action-row">
+                            <button type="button" class="ghost-button" id="exportDataButton">Export Data</button>
+                            <button type="button" class="secondary-button" id="resetDataButton">Reset App Data</button>
+                        </div>
+                        <p class="muted">Use export for backup or sharing your current state. Reset clears local browser data for Nexora.</p>
+                    </article>
+                </section>
+                <section class="dashboard-grid dashboard-grid-visuals">
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Life Balance</p>
+                                <h3>Personal operating snapshot</h3>
+                            </div>
+                        </div>
+                        <div id="profileBalanceBoard" class="bar-list empty-state">No personal balance data yet.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <p class="eyebrow">Ownership Center</p>
+                                <h3>Data awareness</h3>
+                            </div>
+                        </div>
+                        <div id="profileOwnershipBoard" class="insight-list empty-state">No ownership information yet.</div>
+                    </article>
+                </section>
+                <section class="panel">
+                    <div id="profileInsights" class="insight-list empty-state">Profile insights will appear here.</div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div id="toastHost" class="toast-host"></div>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>

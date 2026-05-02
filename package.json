@@ -1,0 +1,9 @@
+{
+  "name": "nexora",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nexora full-stack personal life command center",
+  "scripts": {
+    "start": "node ./web/server.js"
+  }
+}
